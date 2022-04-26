@@ -194,30 +194,8 @@ aucsignal<-function(dat,mut_strength,type_of_collapse, patches, species ,dispers
               connectance=connectance))
   
 }
-int.matrices<-function(dat, alpha,halpha=NULL,patches=no.of.patches){
-  species<-dim(alpha)[1]
-  a<-numeric()
-  end.mat<-begin.mat<-array(NA,dim=c(patches,species,species))
-  for(i in 1:patches){
-    for(j in 1:species){
-      for(k in 1:species){
-        end.mat[i,j,k]<-dat[[1]]$N[1500,i,k]*alpha[i,j,k]
-        begin.mat[i,j,k]<-dat[[1]]$N[1,i,k]*alpha[i,j,k]
-        
-      }
-    }
-    a[i]<-sum(abs(end.mat[i,,]-begin.mat[i,,])/(end.mat[i,,]+begin.mat[i,,]))
-  }
-  return(list(end.mat=end.mat,begin.mat=begin.mat))
-}
 
-adj.mat<-function(data){
-  #dat <- paste('network.csv',sep='')
-  d <- read.csv(file=data,header=FALSE )
-  dat<-as.matrix(d)
-  dat[dat > 0] = 1
-  dat<-apply(dat,2,as.numeric)
-  return(dat)}
+
 
 
 Morans.i<-function(t,state, M, no.of.patches){
@@ -242,74 +220,10 @@ Morans.i<-function(t,state, M, no.of.patches){
 }
 
 
-#  @title beta-diversity of two networks
-#  @description
-#' measures the beta-diversity between two networks
-#  @param n1 network 1 (as an igraph object)
-#  @param n2 network 2 (as an igraph object)
-#  @param bf any function to measure beta-diversity between two sets
-#'
-#  @return a list with components S, OS, WN, and ST. While interpreting
-#' the output, it is important to consider that ST is strongly constrained by
-#' the values of S (the species composition dissimilarity). ST is only really
-#' meaningful when the values of S are "intermediate"; a good example is when
-#' the networks have been sampled along a gradient, and a more or less equal
-#' proportion of the species show turnover from one step to the next. In the
-#' situations where S is either really high or really low, the values of ST
-#' are constrained and should no be given importance. The values of OS and WN,
-#' and how they relate to S, have more informative value.
-#  @export
-
-
-betalink2<-function (n1, n2, bf = B01) 
-{
-  n1<-graph_from_adjacency_matrix(n1, mode="undirected",
-                                  weighted = TRUE, diag=FALSE)
-  n2<-graph_from_adjacency_matrix(n2, mode="undirected",
-                                  weighted = TRUE, diag=FALSE)
-  
-  v1 <- igraph::V(n1)$name
-  v2 <- igraph::V(n2)$name
-  vs <- v1[v1 %in% v2]
-  beta_S <- bf(betapart(v1, v2))
-  e1 <- plyr::aaply(igraph::get.edgelist(n1), 1, function(x) stringr::str_c(x, 
-                                                                            collapse = "--", paste = "_"))
-  e2 <- plyr::aaply(igraph::get.edgelist(n2), 1, function(x) stringr::str_c(x, 
-                                                                            collapse = "--", paste = "_"))
-  beta_WN <- bf(betapart(e1, e2))
-  if (length(vs) >= 2) {
-    sn1 <- igraph::induced.subgraph(n1, which(igraph::V(n1)$name %in% 
-                                                vs))
-    sn2 <- igraph::induced.subgraph(n2, which(igraph::V(n2)$name %in% 
-                                                vs))
-    se1 <- plyr::aaply(igraph::get.edgelist(sn1), 1, function(x) stringr::str_c(x, 
-                                                                                collapse = "--", paste = "_"))
-    se2 <- plyr::aaply(igraph::get.edgelist(sn2), 1, function(x) stringr::str_c(x, 
-                                                                                collapse = "--", paste = "_"))
-    beta_OS <- bf(betapart(se1, se2))
-    beta_ST <- beta_WN - beta_OS
-  }
-  else {
-    beta_OS <- NaN
-    beta_ST <- NaN
-  }
-  return(list(S = beta_S, OS = beta_OS, WN = beta_WN, ST = beta_ST))
-}
-
-
-# @title Partition sets A and B
-# @description
-#' given any two sets (arrays) A and B, return the size of components
-#' a, b, and c, used in functions to measure beta-diversity
-# @param A any array
-# @param B any array
-# @export
-# @examples
-#' A = c(1,2,3)
-#' B = c(2,3,4)
-#' betapart(A, B)
-betapart <- function(A,B) list(b=sum(!(A %in% B)), c=sum(!(B %in% A)), a=sum(B %in% A))
-
+#main dynamical funciton
+#time: total time,
+#state: abundances 
+#pars: list of parameters
 
 
 eqs<-function(time, state ,pars){
@@ -394,7 +308,7 @@ Mcommunity_1 = function(iter, time, ...){
 
 
 
-
+#dynamical function that evaluates tipping point at the level of species
 eqs_species<-function(time, state ,pars){
   
   Aspecies<-pars$Aspecies
@@ -529,23 +443,12 @@ Mcommunity_sp = function(iter, time, ...){
 
 
 
+#function that estiamtes all the statistical metrics at the community level, metacommunity level and species level such as 
+# alpha variability, beta variability, average species autocorrelation, standard deviation.
+
 meta.stats<-function(dat, patches, species, time,disp.mat, type_of_collapse,patch_affected){
   
- if(type_of_collapse == "local"){
-   data<-array(NA,dim=c(time,patches,species))
-   biomass.patches.affected<-array(NA,dim=c(time,patches))
-   biomass_patch_affected<-array(NA,dim=c(time,patches))
-   biomass.of_patch.affected<-numeric()
-   for(k in 1:patches){
-     data[,k,]<-cbind(dat[[1]]$N[,k,], dat[[1]]$Np[,k,])
-   }
-   biomass_patch_affected <- cbind(dat[[1]]$N[,patch_affected,], dat[[1]]$Np[,patch_affected,])
-   for(t in 1:time){
-   biomass.of_patch.affected[t] <- sum(biomass_patch_affected[t,])
-     
-   }
-   mean.patch.affected<-mean(biomass.of_patch.affected)
- }else if(type_of_collapse == "global"){
+if(type_of_collapse == "global"){
    data<-array(NA,dim=c(time,patches,species))
   for(k in 1:patches){
       data[,k,]<-cbind(dat[[1]]$N[,k,], dat[[1]]$Np[,k,])

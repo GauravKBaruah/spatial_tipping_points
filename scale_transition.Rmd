@@ -225,31 +225,6 @@ b3<-(fact %>% filter(web == "plant_pollinator/M_PL_061_14.csv") %>%
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE,fig.align='center',fig.width=7, fig.height=5, fig.cap='Relationship between species degree (number of unique species interactions) in a network and strength of mutualistic interaction at which the species collapsed shown for three different rates of species dispersal. Metacommunity size didnt have an impact on the threshold mutualistic strength at which species collapsed (see table 1). As species degree increased, the threshold mutualistic strength at which species collapsed was higher indicating that having a high species degree led to species collapsing much earlier (at a higher mutualistic strength).'}
 
-
-
-load("Species_tipping_points_spatial_data.RData")
-
-
-#converting the dataframe to numeric 
-new_df$a<-as.numeric(new_df$a)
-new_df$patches<-as.numeric(new_df$patches)
-new_df$species <- as.numeric(new_df$species)
-new_df$tipping.points<-as.numeric(new_df$tipping.points)
-new_df$degree<-as.numeric(new_df$degree)
-new_df$nestedness<-as.numeric(new_df$nestedness)
-new_df$connectance<-as.numeric(new_df$connectance)
-
-new_df<-new_df %>% filter(web !="plant_pollinator/M_PL_046.csv")
-new_df<-new_df %>% filter(web !="plant_pollinator/M_PL_013.csv")
-
-#new_df %>% 
-#ggplot(aes(y=tipping.points, x=(degree), color = factor(web)))+
-#  geom_point()+
-#  stat_smooth(method = "lm", se=F,formula = y ~ x)+
- # theme_cowplot()+theme(legend.position = "none")+xlab("species degree")+
-  #ylab("Mutualistic strength")+
-  #facet_wrap(.~factor(a))
-
 ```
 
 ```{r,echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}

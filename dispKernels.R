@@ -22,32 +22,3 @@ thompson_etal<-function(distance, w){
 }
 
 
-
-Gaussian <- function(distance, w){
-  M <- exp( -distance^2 / (2 * w^2) ) 
-  return( M )
-}
-
-Exponential <- function( distance, w){
-  M <- exp( - distance / w )
-  return( M )
-}
-
-Rectangular <- function( distance, w){
-  M <- ( distance < w ) * 1 
-  return( M )
-}
-
-Triangle <- function( distance, w){
-  M <- ( 1 - distance / w )
-  M[M < 0] <- 0
-  return( M )
-}
-
-Beta <- function( distance , w, alpha = 2, beta = 2 ){
-  M <- dbeta( distance / w , alpha, beta )
-  return( M )
-}
-
-
-

@@ -6,39 +6,19 @@ library(ggplot2)
 library(grid)
 library(gridExtra)
 library(vegan)
+library(NetIndices)
+library(betalink)
+library(igraph)
+library(DescTools)
 source('~/Dropbox/EAWAG PostDoc/06_scale_of_EWS/spatial_tipping_points/dispKernels.R',echo=F)
 source('~/Dropbox/EAWAG PostDoc/06_scale_of_EWS/spatial_tipping_points/buildlandscape.R', echo=F)
 source('~/Dropbox/EAWAG PostDoc/06_scale_of_EWS/spatial_tipping_points/Functions.R', echo=F)
 
 
-library(NetIndices)
-library(betalink)
-library(igraph)
-library(DescTools)
-
-create_matrix<-function(SA,SP,required_nestedness){
-
-nestd<-0
-
-while(nestd !=required_nestedness) {
-  
-  web <- matrix(rbinom(SA*SP, 1, prob=0.6),nrow=SA,ncol =SP)
-  nestd<-round(nestedness_NODF(web),1)
-  
-  if(nestd == required_nestedness){
-    web<-web
-  }else {
-    nestd <- nestd
-  }
-  
-}
-return(web)
-  
-}
 
 
 #empty arrays for abundance of species
-start.time <-2000
+start.time <-5000
 
 
 #coordinates for the 2-D patches
@@ -65,7 +45,7 @@ Disp.mat<- BuildRndLandscape(N = 2,w=0.5, Coordinates=coordinates_2,FUN = thomps
 plot_net(Disp.mat,coordinates_2)
 
 
-model<-"Thompson_et_al"
+
 pars<-list()
 
 
@@ -76,8 +56,8 @@ myfiles<-myfiles[1:56]
 
 
 #creating an empty data frame
-fact<- expand.grid(`w`=1,
-                   `g0` = seq(5,0,-0.175),
+fact<- expand.grid(`w`=0.5,
+                   `g0` = seq(6,0,-0.175),
                    `a`= c(0,0.05,0.15),
                    `web`=myfiles,
                    `no_of_patches` =c(2,5,10,20),
@@ -131,19 +111,6 @@ for(j in 1:nrow(fact)){
   }
   
   
-  if(fact$no_of_patches[j] == 2 & fact$type.of.collapse[j] == "local"){
-    coordinates<- Cordinates_list$coordinates_2
-    patch_affected_2<-patch_removed_2
-  }else if(fact$no_of_patches[j] == 5 & fact$type.of.collapse[j] == "local"){
-    coordinates<- Cordinates_list$coordinates_5
-    patch_affected_5<- patch_removed_5
-  }else if(fact$no_of_patches[j] == 10 & fact$type.of.collapse[j] == "local"){
-    coordinates<- Cordinates_list$coordinates_10
-    patch_affected_15 <- patch_removed_15
-  }else if(fact$no_of_patches[j] == 20 & fact$type.of.collapse[j] == "local"){
-    coordinates<- Cordinates_list$coordinates_20
-    patch_affected_20<- patch_removed_20
-  }
   
   
   Disp.mat<-BuildRndLandscape(N = fact$no_of_patches[j],w=1,Coordinates=coordinates,
@@ -167,25 +134,14 @@ for(j in 1:nrow(fact)){
 
      
       for(k in 1:fact$no_of_patches[j]){
-        alpha_a[k,,] <- runif(Aspecies^2, 0.005,0.01)
-        alpha_p[k,,] <-runif(Pspecies^2,0.005,0.01)
-       diag(alpha_a[k,,])<-0.5;diag(alpha_p[k,,])<-0.5
+        alpha_a[k,,] <- runif(Aspecies^2, 0.005,0.01) #interspecies competition
+        alpha_p[k,,] <-runif(Pspecies^2,0.005,0.01) #interspecies competition plants
+       diag(alpha_a[k,,])<-0.5;diag(alpha_p[k,,])<-0.5 #intraspecific competition
        
-        # }else{ alpha_a <-alpha_a;alpha_p<-alpha_p
-        # }
-        # 
-        
-        ra[k,] <- runif(Aspecies,-0.1,-0.01)
-        rp[k,] <- runif(Pspecies,-0.1,-0.01)
-       if(fact$type.of.collapse[j] == "local" & fact$no_of_patches[j] == 2){  
-        gamma[patch_affected_2,,] <- rnorm(Aspecies*Pspecies, fact$g0[j], 0.005)
-       }else if(fact$type.of.collapse[j] == "local" & fact$no_of_patches[j] == 5) {
-         gamma[patch_affected_5,,] <- rnorm(Aspecies*Pspecies, fact$g0[j], 0.005)
-       }else if(fact$type.of.collapse[j] == "local" & fact$no_of_patches[j] == 15) {
-         gamma[patch_affected_15,,] <- rnorm(Aspecies*Pspecies, fact$g0[j], 0.005)
-       }else if(fact$type.of.collapse[j] == "local" & fact$no_of_patches[j] == 20) {
-         gamma[patch_affected_20,,] <- rnorm(Aspecies*Pspecies, fact$g0[j], 0.005)
-       }else if(fact$type.of.collapse[j] == "global"){
+      
+        ra[k,] <- runif(Aspecies,-0.1,-0.01) #obligate mutualism 
+        rp[k,] <- runif(Pspecies,-0.1,-0.01) #obligate mutualism
+      if(fact$type.of.collapse[j] == "global"){
          for(i in 1:Aspecies){
            for(r in 1:Pspecies){
              gamma[k,i,r] <- rnorm(1,fact$g0[j], 0.00)*g[i,r]
@@ -202,7 +158,7 @@ for(j in 1:nrow(fact)){
   pars<-list(Aspecies=Aspecies,Pspecies=Pspecies,patches=fact$no_of_patches[j], Disp.mat=Disp.mat,Ga=Ga,Gp=Gp,g0=fact$g0[j],
              alpha_a=alpha_a,alpha_p=alpha_p,ra=ra,rp=rp,gamma=gamma,model="Thompson_et_al",type_of_collapse= fact$type.of.collapse[j])
   
-  start.time = 4000
+  start.time = 5000
   state<-0.5
   model.t<-lapply(1, Mcommunity_1,time=start.time,state=state,
                   pars=pars)
@@ -211,14 +167,6 @@ for(j in 1:nrow(fact)){
   
   if(fact$type.of.collapse[j] == "global") {
     fact$patch_affected[j] <- 0
-  }else if (fact$type.of.collapse[j] == "local" & fact$no_of_patches[j] == 2) 
-  {fact$patch_affected[j] <- patch_removed_2
-  }else if (fact$type.of.collapse[j] == "local" & fact$no_of_patches[j] == 5) {
-    fact$patch_affected[j] <- patch_removed_5
-  }else if (fact$type.of.collapse[j] == "local" & fact$no_of_patches[j] == 10) {
-    fact$patch_affected[j] <- patch_removed_10
-  }else if (fact$type.of.collapse[j] == "local" & fact$no_of_patches[j] == 20) {
-    fact$patch_affected[j] <- patch_removed_20
   }
 
   temp_mat<-meta.stats(dat=model.t, patches=pars$patches,
@@ -248,250 +196,9 @@ for(j in 1:nrow(fact)){
   fact$spatial.sd[j]<-temp_mat$metacom_variability
   fact$spatial.correlation[j]<-temp_mat$spatial.correlation
   fact$species.sd[j]<-mean(temp_mat$species_level_sd,na.rm=T)
-   if(fact$type.of.collapse[j] == "global"){ 
-     fact$mean.biomass.patch.affected[j] <- 0
-   }else if(fact$type.of.collapse[j] == "local"){
-     fact$mean.biomass.patch.affected[j] <- temp_mat$mean.biomass.patch.affected
-     }
+   
 
   print(j)
 }
 
-# #save(fact, file="example_network_collapse.RData")
-# 
-# #15019
-# #
-# #save(fact, file="scale_of_ews_real_webs_20may.RData")
-# #load("scale_of_ews_real_webs_20may.RData")
-# #load("scale_of_ews_real_webs_15may.RData")
-# #fact<-rbind(fact,fact_1)
-# 
-# #save(fact,file="scale_of_ews_webs_all_data.RData")
-# 
-# load("scale_of_ews_webs_all_data.RData")
-# #load("example_network_collapse.RData")
-# 
-# #point of collapse estimation
-# 
-# 
-# fact<-fact %>% filter(web != "plant_pollinator/M_PL_013.csv" & web!= "plant_pollinator/M_PL_046.csv")
-# 
-# point_of_collapse_data<-expand.grid(`a`= c(0,0.05,0.15),
-#                                     `no.of.species`=as.numeric(levels(as.factor(fact$network.size))),
-#                                     `no_of_patches` =c(2,5,10,20),
-#                                     `type.of.collapse` = "global",
-#                                     `random_seed`=4327+(1:1)*100) %>% 
-#   as_tibble %>% 
-#   mutate(`point_of_collaspe`=0)
-# 
-# for(i in 1:nrow(point_of_collapse_data)){
-#   tempp<-collapse.point(dat = fact, mut_strength = fact$g0, 
-#                         type_of_collapse = point_of_collapse_data$type.of.collapse[i], 
-#                         patches = point_of_collapse_data$no_of_patches[i],
-#                         species = point_of_collapse_data$no.of.species[i], 
-#                         dispersal_rate = point_of_collapse_data$a[i] , 
-#                         seed = point_of_collapse_data$random_seed[i])
-#   
-#   point_of_collapse_data$point_of_collaspe[i]<-tempp
-# }
-# 
-# 
-# 
-# 
-# #plotting point of collapse
-# tempdat<-point_of_collapse_data #%>% filter(no_of_patches !=20)
-# 
-# tempdat$point_of_collaspe<-tempdat$point_of_collaspe
-# hist(tempdat$point_of_collaspe)
-# qqnorm((tempdat$point_of_collaspe)^4)
-# 
-# summary(model1<-glm(point_of_collaspe/5 ~ no.of.species*no_of_patches+a,
-#                     family = quasibinomial,
-#                     data=tempdat))
-# 
-# #rule of thumb of over dispersion: the ration of residual deviance to df should be 1. 
-# 
-# 
-# point_of_collapse_data %>%  
-#   filter_all(all_vars(!is.infinite(.))) %>% 
-#  # filter(no_of_patches !=20) %>% 
-#   filter(type.of.collapse ==  "global") %>% 
-#   ggplot(aes(x = no.of.species,
-#              y=point_of_collaspe/5, 
-#              color = factor(no_of_patches)))+
-#   #geom_point(outlier.size = 0)+
-#   geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
-#   ylab("Point of transition")+
-#   xlab("Network size")+
-#   stat_smooth(method = "glm",se = T,
-#               method.args = list(family = "quasibinomial"))+
-#   scale_color_brewer(palette="Dark2")+
-#   theme_bw()+
-#   facet_grid(.~a)
-# 
-# 
-# 
-# #area under the curve for signals of collapse
-# 
-# auc_ews_data<-expand.grid(`a`= c(0,0.05,0.15),
-#                           `no.of.species`=as.numeric(levels((as.factor(fact$network.size)))),
-#                           `no_of_patches` =c(2,5,10,20),
-#                           `type.of.collapse` =  "global",
-#                           `random_seed`=4327+(1:1)*100) %>% 
-#   as_tibble %>% 
-#   mutate(`auc_regional_variability`=0,
-#          `auc_spatial_correlation`=0,
-#          `auc_alpha_variation`=0,
-#          `auc_spatial_variation`=0,
-#          `auc_spatial_sd`=0,
-#          `auc_sd`=0,
-#          `auc_ar1`=0,
-#          `spatial_ar1`=0)
-# 
-# 
-# for(i in 1:nrow(auc_ews_data)){
-# dtt<-aucsignal(dat = fact, 
-#                mut_strength = fact$g0,
-#           type_of_collapse =auc_ews_data$type.of.collapse[i],
-#           patches = auc_ews_data$no_of_patches[i],
-#           species = auc_ews_data$no.of.species[i],
-#             dispersal_rate = auc_ews_data$a[i],
-#           seed = auc_ews_data$random_seed[i],
-#           tipping.point = point_of_collapse_data$point_of_collaspe[i])
-# 
-#   
-#   auc_ews_data$auc_regional_variability[i] <-dtt$auc_regional_variability
-#   auc_ews_data$auc_spatial_correlation[i] <- dtt$auc_spatial_correlation
-#   auc_ews_data$auc_spatial_variation[i]<-dtt$auc_spatial_variation
-#   auc_ews_data$auc_spatial_sd[i] <-dtt$auc_spatial_sd
-#   auc_ews_data$auc_sd[i] <-dtt$auc_sd
-#   auc_ews_data$auc_ar1[i] <- dtt$auc_ar1
-#   auc_ews_data$auc_alpha_variation[i] <-dtt$auc_alpha_variation
-#   auc_ews_data$spatial_ar1[i] <- dtt$auc_spatial_ar1
-#   auc_ews_data$web
-#    
-# }
-# 
-# # auc ews 
-# tempauc<-auc_ews_data #%>% filter(no_of_patches !=20)
-# 
-# summary(model1<-lm(log(auc_spatial_variation) ~ no.of.species*no_of_patches*a,
-#                     data=tempauc))
-# hist(log(tempauc$auc_spatial_variation))
-# plot(model1)
-# 
-# auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
-#   #filter(no_of_patches != 20) %>% 
-#   filter(type.of.collapse ==  "global") %>% 
-#   ggplot(aes(x = no.of.species,
-#              y=auc_spatial_variation, 
-#              color = factor(no_of_patches)))+
-#   #geom_boxplot(outlier.size = 0)+
-#   geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
-#   ylab("AUC spatial variation")+
-#   xlab("Network size")+
-#   stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
-#   scale_color_brewer(palette="Dark2")+
-#   theme_bw()+
-#   facet_grid(.~a)
-# 
-# 
-# 
-# # auc standard deviation
-# auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
-#   #filter(no_of_patches != 20) %>% 
-#   filter(type.of.collapse ==  "global") %>% 
-#   ggplot(aes(x = no.of.species,
-#              y=auc_sd, 
-#              color = factor(no_of_patches)))+
-#   #geom_boxplot(outlier.size = 0)+
-#   geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
-#   ylab("AUC species level standard deviation ")+
-#   xlab("Network size")+
-#  # stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
-#   scale_color_brewer(palette="Dark2")+
-#   theme_bw()+
-#   facet_grid(.~a)
-# 
-# 
-# #auc alpha variability
-# auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
-#   #filter(no_of_patches != 20) %>% 
-#   filter(type.of.collapse ==  "global") %>% 
-#   ggplot(aes(x = no.of.species,
-#              y=auc_alpha_variation, 
-#              color = factor(no_of_patches)))+
-#   geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
-#   ylab("AUC alpha variation")+
-#   xlab("Network size")+
-#   #stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
-#   scale_color_brewer(palette="Dark2")+
-#   theme_bw()+
-#   facet_grid(.~a)
-# #auc_regional_variability
-# 
-# 
-# auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
-#   filter(type.of.collapse ==  "global") %>% 
-#   #filter(no_of_patches != 20) %>% 
-#   ggplot(aes(x = no.of.species,
-#              y=auc_regional_variability, 
-#              color = factor(no_of_patches)))+
-#   geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
-#   ylab("AUC regional variation")+
-#   xlab("Network size")+
-#   stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
-#   scale_color_brewer(palette="Dark2")+
-#   theme_bw()+
-#   facet_grid(.~a)
-# 
-# #spatial autocorrelation at first lag1
-# auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
-#   ggplot(aes(x = no.of.species,
-#              y=spatial_ar1, 
-#              color = factor(no_of_patches)))+
-#   geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
-#   ylab("AUC regional variation")+
-#   xlab("Network size")+
-#   #stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
-#   scale_color_brewer(palette="Dark2")+
-#   theme_bw()+
-#   facet_grid(.~a)
-# 
-# 
-# #spatial autocorrelation at first lag1
-# 
-# summary(model1<-lm((auc_ar1) ~ no.of.species+no_of_patches+a,
-#                    data=tempauc))
-# hist(log(tempauc$auc_spatial_variation))
-# plot(model1)
-# 
-# 
-# auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
-#   ggplot(aes(x = no.of.species,
-#              y=auc_ar1, 
-#              color = factor(no_of_patches)))+
-#   geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
-#   ylab("AUC regional variation")+
-#   xlab("Network size")+
-#   stat_smooth(method = "lm", se=F, formula = y ~x)+
-#   scale_color_brewer(palette="Dark2")+
-#   theme_bw()+
-#   facet_grid(.~a)
-# 
-# 
-# #spatial autocorrelation at first lag1
-# auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
-#   ggplot(aes(x = no.of.species,
-#              y=auc_spatial_correlation, 
-#              color = factor(no_of_patches)))+
-#   geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
-#   ylab("AUC regional variation")+
-#   xlab("Network size")+
-#   #stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
-#   scale_color_brewer(palette="Dark2")+
-#   theme_bw()+
-#   facet_grid(.~a)
-# 
-# #creating network size classes 
-# 
+ #save(fact, file="example_network_collapse.RData")
