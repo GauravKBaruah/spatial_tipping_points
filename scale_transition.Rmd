@@ -1,0 +1,813 @@
+---
+title: 'Abrupt transitions and its indicators in mutualistic meta-networks: effects of network topology, size of metacommunities and species dispersal'
+author: Gaurav Baruah^[gbaruahecoevo@gmail.com, Swiss Federal Institute of Acquatic
+  Science and Technology, EAWAG, Kastanienbaum, CH]
+
+header-includes:
+  \usepackage{lineno}
+  \linenumbers
+  \usepackage{setspace}
+  \doublespacing
+  \usepackage{float} 
+  \floatplacement{figure}{H} 
+
+  \newcommand{\beginsupplement}{\setcounter{table}{0}                    
+  \renewcommand{\thetable}{S\arabic{table}} 
+  \setcounter{figure}{0}           
+  \renewcommand{\thefigure}{S\arabic{figure}}}
+  
+date: "`r format(Sys.time(), '%d %B %Y')`"
+
+bibliography: ref.bib 
+link-citations: yes
+
+
+
+csl: https://raw.githubusercontent.com/citation-style-language/styles/master/elsevier-harvard2.csl
+geometry: margin=1.25in
+fontsize: 11pt
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: no
+  word_document:
+    toc: no
+    highlight: tango
+  bookdown::pdf_document2:
+    toc: no
+    highlight: zenburn
+    fig_caption: yes
+    number_sections: no
+    
+
+    
+abstract: Gradual changes in the environment could cause dynamical ecological networks to abruptly shift from one state to an alternative state. When this happens ecosystem functions and services provided by ecological networks gets disrupted. We, however, know very little of how the topology of such interaction networks can play a role in  transitions of ecological networks at a spatial scale. In the event of such unwanted transitions, little is known how statistical metrics used to inform such impending transitions, measured at the species-level or at the community-level could relate to network architecture and the scale of spatial interactions. Here, using fifty-six empirical plant-pollinator networks in a spatial setting, I evaluated the impact of network topology and spatial scale of species interactions on abrupt transitions, and on statistical metrics used as predictors to forecast such abrupt transitions. Using generalized Lotka-Volttera equations in a meta-network framework, I show that species dispersal rate and the size of the metacommunity can impact when an abrupt transition can occur. In addition, forecasting such unwanted abrupt transitions of meta-networks using statisitcal metrics of instability was also consequently dependent on the topology of the network, species dispersal rate, and the size of the metacommunity. The results indicated that the plant-pollinator meta-networks that could exhibit stronger statistical signals before collapse than others was dependent on their network architecture and on the spatial scale of species interactions. 
+---
+
+keywords: meta-networks, mutualistic networks, abrupt transitions, dispersal, early warning signals
+
+------------------------------------------------------------------------
+
+\pagebreak
+
+# Introduction
+
+Ecological systems could abruptly shift from one state to another in response to gradual changes in environmental conditions. Such abrupt transition occurs when environmental conditions cross a specific threshold, the threshold being commonly known as tipping points [@scheffer_alternative_1993; @dakos_ecosystem_2018]. Tipping points and abrupt transitions are generally observed in ecological systems governed by positive feedback loops. Abrupt transitions can occur in systems ranging from acquatic systems such as algae and macrophyptes [@dakos_ecosystem_2018], mutualistic ecological networks [@dakos_critical_2014; @lever_sudden_2014; @baruah_impact_2022], and populations exhibiting allee thresholds [@hilker_population_2010]. When such abrupt transitions occurs, the equilibrium stable state of the system jumps to another state where loss of beneficial ecosytem functions and services could occur [@scheffer_anticipating_2012; @hutchings_marine_2004; @dunne_cascading_2009]. Abrupt transitions, thus, can cause long-term radical changes to ecosystems. However, at the scale of multiple communities connected by species dispersal, very few studies have explored how local network architecture and spatial scale of interactions could impact the timing of abrupt transitions .
+
+Mutualistic communities are examples of communities that exhibit positive feedback loops in networks of interactions between two groups of species [@bascompte_nested_2003; @kefi_when_2016; @dakos_critical_2014]. While negative interactions such as intraspecific competition could have stabilising effects, positive interactions such as those observed in plant-pollinator or mutualistic networks could be destabilising and could result in the presence of alternative stable states [@baruah_impact_2022]. As such due to the presence of such alternative stable states, mutualistic communities can transition from a stable state to an alternative state as environmental change causes a change in the system's feedback strength [@lever_foreseeing_2020]. The spatial context of such transition has somewhat remain unexplored, particularly on the impact of topological and architectural aspects of such systems such as network size, nestedness, or connectance. Previous study on spatial mutualistic systems has suggested that the presence of transitions can be modulated by shift in strength in species phenology or habitat destruction [@fortuna_habitat_2006]. Habitat destruction increases the chances of abrupt transition which rewires local networks [@revilla_robustness_2015]. In addition, with strong mutualistic interactions the amount of habitats required for persistence of all species then depends on the range of species dispersal [@prakash_habitat_2004]. However, it is unknown whether topological features of mutualistic networks such as network size or connectance could influence the timing of occurrence of abrupt transition in response to gradual changes in environment. For instance, could larger networks collapse earlier in comparison to smaller networks?
+
+Rarely, ecologlical communities occur in isolation. More often, ecological communities occur in habitat patches across a larger network of patches that is connected by dispersal, which is commonly known as a metacommunity. Metacommunity concept has gained much attention over the last decade and empirical and theoretical studies have provided with an understanding of how local and regional processes work to maintain diversity both at local and regional scale [@loreau_biodiversity_2003; @limberger_spatial_2019]. Species diversity can stabilize the dynamics of local communities. This stabilization occurs due to different asynchronous responses of species over time to temporal changes in the environment. Such stabilization due to increases in number of species is generally known as species insurance effects [@loreau_biodiversity_2003; @heino_metacommunity_2015; @shoemaker_linking_2016]. Species insurance can occur due to interspecific competition [@lehman_biodiversity_2000], or when species response to biotic environment differs from other species [@loreau_biodiversity_2003]. Spatial insurance in metacommunities arises when local communities exhibit asynchronous dynamics. This happens when species dispersal rate is limited or when species composition across local communities vary considerably thereby leading to spatial heterogeniety [@wang_ecosystem_2014; @walter_geography_2017]. Species dispersal from habitat patches could potentially rescue local communities from collapses as environment changes. However, the role of species dispersal on timing of transition of meta-networks remains unknown. For instance, does spatial scale of species interactions and the spread of such ecological networks (number of habitat patches) determine whether network collapses occur earlier or later?
+
+Local and regional scale extinctions could occur not only due to local processes such as predation or competition but also due to large scale external disturbances [@cunillera-montcusi_metacommunity_2021]. Large scale disturbances akin to changes in climate could impact species interactions not only locally but also across communities connected in space [@thompson_dispersal_2017; @revilla_robustness_2015]. In mutualistic communities, changes in the environment could lead to weakening of interactions between species such as phenological mismatches thereby altering local structure of communities [@forrest_plantpollinator_2015; @visser_evolutionary_2019 ; @morton_plantpollinator_2017; @renner_climate_2018; @kudo_when_2019]. However, such species mismatches could be rescued when similar communities are accessible to species in a mosaic of communities connected by species dispersal. It is, however, unknown whether such global changes in the environment interacts with local network topological properties to mitigate drastic change. Increases in phenological mismatch could be further compounded by habitat destruction and could lead to substantial changes in network architecture [@revilla_robustness_2015]. In addition, whether the spatial scale (size of the metacommunity) of such changes matters in the occurrence of transition is somewhat not known.
+
+There has been statistical tools developed to inform impending transitions that could occur as environment gradually changes [@scheffer_anticipating_2012]. Abrupt transitions could occur when changes in the environment crosses a certain threshold that pushes the ecological system towards another alternative state where ecosystem functions could be lost permanently. However, there are statistical tools that been developed to forecast such impending transitions which are commonly known as "early warning signals". Commonly used signals are temporal autocorrelation and variance that could derived using a sliding window approach (see [@dakos_methods_2012 for details) from state based temporal data such as abundance or biomass. However, the utility of such signals are dependent on a host of factors that includes sampling requirements [@arkilanian_effect_2020], data quality [@clements_factors_2015], eco-evolutionary factors [@baruah_eco-evolutionary_2020; @baruah_effect_2021] and type of species interactions [@baruah_community_2022; @patterson_when_2021; @dakos_identifying_2017]. One important challenge is to test the utility of such signals in a multispecies context embedded within a spatial scale of species interactions. This is especially relevant as multispecies communities rarely occur in isolation and are generally connected by dispersal among habitat patches. The detection of such signals becomes even more challenging as dynamics of such communities are inherently linked to their topological features which also directly impacts the occurrence of transitions [@dakos_critical_2014; @baruah_impact_2022].
+
+Here, using fifty-six empirical plant-pollinator networks in a spatial context collated from web-of-life.es database, I explore the effects of topological network features such as network size, connectance, or nestedness on timing of transitions and on indicators of temporal and spatial resilience. Using generalized Lotka-Voltterra equations, I model the ecological dynamics of spatially-explicit mutualistic meta-networks to global changes in strength in mutualistic interactions. Specifically, using different metacommunity sizes, I show that timing of abrupt transition depends not only how species disperse across habitat patches, but also on local network topological predictors such as network size and connectance of the network. Furthermore, the threshold at which a species could abruptly transition is influenced by the degree of the species, rate of dispersal and also by the size of the metacommunity. In addition, how large the metacommunity was also significantly played a role on how early an abrupt transition might occur. Furthermore, when such global transition of mutualistic metacommunities occur, predictability with temporal and spatial resilience indicators also depends on the topological network features and on the rate of dispersal of species. These results argue the importance of understanding the dynamics of communities from a spatial perspective and highlights the importance of network architecture on biodiversity maintenance.
+
+# Methods
+
+Using www.web-of-life.es database, I collated 56 empirical plant-pollinator networks (see table S1 for details and the references). These empirical networks were set up in a spatially-explicit landscape of different sizes of two, five, ten and twenty habitat patches that determined the spatial scale of mutualistic interactions. This spatial scale determined to what extent plant-pollinator interactions were impacted when global changes occur at the scale of the metacommunity. For instance, when changes in climate that drives changes in phenological interactions occur, does spatial scale of mutualistic interactions matter in delaying an abrupt transition to collapse?
+
+These spatially explicit landscape were set up in a two dimensional landscape [@grilli_metapopulation_2015]. All habitat patches were connected. Following this, I model the ecological dynamics of mutualistic interactions using generalized Lotka-Volterra equations:
+
+```{=tex}
+\begin{equation}
+\frac{dA_i^{k}}{dt} = A_{i} \big( r_{i}^k - \sum_{j} a_{ij}^kA_{j} + \sum_{l} \frac{m_{li} \gamma_{0} P_{l}}{1+ h\sum_{x} m_{xi} \gamma_{0} P_{x}} \big) + M_{i}^k - aA_{i}^k
+\end{equation}
+```
+Similarly, the dynamics of plants on a spatially explicit metacommunity can be written as:
+
+```{=tex}
+\begin{equation}
+\frac{dP_i^{k}}{dt} = P_i \big( r_{i}^k - \sum_j a_{ij}^kP_j + \sum_l \frac{m_{li} \gamma_0  A_l}{1+ h\sum_x m_{xi} \gamma_0  A_x}  \big) + M_i^k - aP_i^k
+\end{equation}
+```
+where $A_i^{k},P_i^{k}$ represents pollinator and plant abundance for habitat patch $k$, $r_{i}^k$ is the species specific growth rate independent of mutualistic interactions at patch $k$, $a_{ij}^k$ represents interspecific competition within each guild of species at patch $k$, $\gamma_0$ represents the average mutualistic interaction strength when a plant and a pollinator interacts, with $m_{li}$ determining the network structure and is either 0 or 1 depending on whether an interaction exist between a plant and a pollinator, $h$ is the handling time which we fixed at 0.15, $M_i^k$ is the density of species that arrives from all the patches in the metacommunity, and finally a fraction of individuals emigrates from a habitat patch $k$ at the rate $a$.
+
+In our model simulations, we ensured that mutualism was obligate without any loss of generality. This meant that growth rates of species $r_i^k$ was negative for both the guilds of species and species persistance totally dependent on mutualistic interactions between species. To do that we randomly sampled growth rates $r_i^k$ from a random uniform distribution within the range of $U[-0.05,0.1]$ for both plants and the pollinators. In addition, we ensured that intraspecific competition within each guild of species was strictly stronger than interspecific competition. For that we ensured that $a_{ii} = 1$ and we sampled $a_{ij}, i \neq j$ from random uniform distribution ranging from $U[0.01,0.05]$. When ensuring that intraspecific competition to be stronger than interspecific competition, feasibility of mutualistic community becomes easier provided strength in mutualistic interactions $\gamma_0$ was high [@baruah_impact_2022; @barabas_self-regulation_2017]. Our goal was to finally assess how network properties come into play at a spatial scale in mitigating the timing of occurrence of abrupt collapses as we change the strength in mutualistic interactions.
+
+Finally, dispersal among patches was constrained by the spatial scale and as well as distance among patches. Species dispersal among patches decreased exponentially as the distance among patches increased. Specifically, dispersal of species $i$ from patch $k$ can be written as [@thompson_dispersal_2017],
+
+$$
+M_i^k = a \sum_{j \neq k}^{n} \frac{e^{-yd_{jk}}}{\sum_{f \neq k}^{n} e^{-y d_{jk}} }N_i^j 
+$$
+
+Following @thompson_dispersal_2017, more than one dispersal route can be taken during a particular time step, $d_{jk}$ is the distance between patch $j$ and $k$ and $y$ controls the rate at which this distance decreases which we fix at 0.5. Fixing it at 0.5 gives global dispersal, which means that as metacommunity sizes become larger species dispersal does not necessarily gets constrained locally and species could in principle disperse long distance. However, the rate at which they disperse would still depend on distance between patches. Finally, $a$ gives the average rate at which species disperse. Here, when we vary rate of dispersal we ensure that species dispersal remains same across guilds of species although in nature this might be species-specific. Here, three rates of species dispersal were used, $a$: $0, 0.05, 0.15$.
+
+# Collapse of spatial mutualistic networks
+
+Nestedness measured as NODF ranged from as low as $0$ to as high as $0.7$, while connectance ranged from . Network size also ranged from as low as $8$ to as high as $68$.
+
+By gradually decreasing the average mutualistic strength globally, mutualistic networks were forced to collapse. As mutualism among guilds of species was obligate, decreasing average mutualistic strength, $\gamma_0$, among species would lead to collapses of species. At a specific mutualistic strength (commonly known as threshold strength or tipping point) collapse of the entire mutualistic network would occur. Collapse of mutualistic networks thus was done by gradually decreasing $\gamma_0$ from $7$ to $0$ in steps of $0.25$. Globally, across habitat patches this scenario could be linked to changes in the climate such that phenological interaction among plants and pollinators would decrease gradually. For each value of $\gamma_0$ I simulated the dynamics of the whole metacommunity till it reached ecological equilibrium. Usually, fluctuations in species density stabilize at around $1000$ time points. I discarded the initial transient dynamics and estimated equilibrium plant and animal biomass from the last $1000$ time points. The extinction threshold of species in such mutualistic networks were fixed at $10^{-4}$. As the strength of mutualistic interactions decreased, loss of species occurred until the entire meta-mutualistic network collapsed. Next, I estimated the slope of the decline of total community abundance as change in total community abundance per change in co-evolutionary mutualistic strength in a habitat patch as $$ N_{\gamma_0{(t+1)}} -  N_{\gamma_0{(t)}}.$$
+
+Next, I determined the point of transition or the mututalistic strength at which a mutualistic network in a habitat patch $k$ transitioned to a collapse state when the total abundance of the network fell below $80$ percent of its equilibrium abundance. Once the mutualistic strength at which a network collapsed in a habitat patch $k$ was determined, I evaluated the relationship of the point of transition with network topology such as connectence and network size, and how such a relationship was influenced by spatial scale of interactions.
+
+# Predictors of temporal and spatial mutualistic network collapses:
+
+I estimated a host of spatial and temporal indicators of collapses at the community level and at the species level. For each mutualistic strength, I estimated spatial variability, regional metacommunity variability, local temporal patch variability. We quantified metacommunity biomass as the sum of all species density across all patches in the metacommunity. I also estimated metacommunity variability defined as the variability in abundance at the metacommunity level (see @wang_ecosystem_2014 and @wang_stability_2019 for details) - $\frac{\sqrt(\sum_{ij}w_{ij}}{\bar N}$, where $w_{ij}$ is the covariance matrix of community biomass $N_i(t)$ at patch $i$ and $\bar N$ is the temporal mean of the total metacommunity biomass. Temporal variation or alpha variability was estimated as $\frac{\sqrt(\sum_{i}w_{ii}}{\bar N}$ and spatial beta variability was quantified as as the variability at spatial level $\frac{\sum_{ij}w_{ij}}{(\sum_i \sqrt{w_{ii}})^2}$ [@wang_ecosystem_2014] for each levels of average dispersal rate, metacommunity size, and for each mutualistic threshold strength.
+
+At the species level, I estimated standard deviation and temporal autocorrelation coefficient of equilibrium species abundance for each level of mutualistic strength, for three different rates of species dispersal and metacommunity sizes. Temporal autocorrelation coefficient at first-lag and standard deviation are the classic phenomenological early warning signals that are suggested to be useful in forecasting critical transitions. Temporal autocorrelation coefficient at first-lag is measured as, $y(N_{t+1})= \alpha y(N_{t}) + \sigma\epsilon_n$, where $\alpha$ is the autocorrelation coefficient of the first-order autoregressive (AR(1)) process. $\alpha$ is close to 1 for a red-noise and close to 0 for white noise process. $\alpha$ close to 1 would indicate that the temporal abundance dynamics of a species is highly correlated and 0 would mean uncorrelated. High correlation would indicate that species is closer to a tipping point.
+
+I wanted to evaluate whether statistical metrics measured at the species level or at the level of the community could increase as strength in mutualistic interaction $\gamma_0$ decrease, indicating an impending critical transition. So for each level of changes in the mutualistic strength of interaction $\gamma_0$ , temporal autocorrelation and standard deviation was measured at the species level, metacommunity variability was measured at the level of the metacommunity, patch variability was measured at the level of a patch, and spatial variability across habitat patches were estimated. To compare whether these metrics performed well, I estimated the area under the curve (AUC). To elaborate on this, as mutualistic strength decreases, one expectation from these statistical metrics is that that the values of these statistical metrics will increase. For instance, as shown in figure 1C, indicator 1 increases steeply as $\gamma_0$ decreases, and whether an indicator performs better could be evaluated by calculating the area under the curve of the metric. Stronger the increase, larger would be the AUC of the statistical metric in question.
+
+```{r,echo=FALSE, warning =FALSE, message=FALSE}
+
+
+library(magic)
+library(igraph)
+library(dplyr)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(vegan)
+library(igraph)
+library(bipartite)
+library(NetIndices)
+library(betalink)
+library(igraph)
+library(DescTools)
+
+source('~/Dropbox/EAWAG PostDoc/06_scale_of_EWS/spatial_tipping_points/dispKernels.R',echo=F)
+source('~/Dropbox/EAWAG PostDoc/06_scale_of_EWS/spatial_tipping_points/buildlandscape.R', echo=F)
+source('~/Dropbox/EAWAG PostDoc/06_scale_of_EWS/spatial_tipping_points/Functions.R', echo=F)
+
+
+
+load("scale_of_ews_webs_all_data.RData")
+
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+#grid_arrange_shared_legend(b1,b2,b3,nrow=3,ncol=1)
+
+net1<-adj.mat("plant_pollinator/M_PL_003.csv")
+net3<-adj.mat("plant_pollinator/M_PL_061_33.csv")
+net2<-adj.mat("plant_pollinator/M_PL_061_18.csv")
+
+
+#par(mfrow=c(2, 2))
+p1<-plotweb(net1,
+              method="normal",ybig=0.1, y.width.low = 0.1,
+              col.interaction="wheat4",
+              bor.col.interaction="white", 
+              arrow="no",  col.high="lightblue",
+              col.low="tomato",labsize=0.1)
+
+p1<-recordPlot()
+
+
+p2<-plotweb(net2,
+              method="normal",ybig=0.1, y.width.low = 0.1,
+              col.interaction="wheat4",
+              bor.col.interaction="white", 
+              arrow="no",  col.high="lightblue",
+              col.low="tomato",labsize=0.1)
+p2<-recordPlot()
+
+p3<-plotweb(net3,
+              method="normal",ybig=0.1, y.width.low = 0.1,
+              col.interaction="wheat4",
+              bor.col.interaction="white",
+              arrow="no",  col.high="lightblue",
+              col.low="tomato",labsize=0.1)
+
+p3<-recordPlot()
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=7, fig.height=4, fig.cap="(B) Example equilibrium metacommunity abundance as mutualistic strength is decreased gradually for  (A) two different networks which vary in the total number of species for different sizes of metacommunity and rate of species dispersal. (Note that in the depiction of mutualistic networks the line thickness describing interactions between plants and animals decreases as network size increases in order to accommodate the increasing number of interactions). C) As metacommunity biomass collapses due to decrease in mutualistic strength, strength in statistical indicator 1 and statistical indicator 2 increases. However, indicator 1 steeply increases in comparison to indicator 2 and this can be compared by calcuating the area under the curve of indicator 1 and indicator 2. Clearly in this case, indicator 1 is better as its area under its curve is larger than indicator 2."}
+
+
+knitr::include_graphics("figure_1.pdf")
+
+library(gridBase)
+library(grid)
+library(biwavelet)
+library(ggplot2)
+library(cowplot)
+library(gridGraphics)
+#biomass web number 1
+b1<-fact %>% filter(web == "plant_pollinator/M_PL_003.csv") %>% 
+  ggplot(aes(x=g0, y=metacomm_biomass, color=factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+xlab("")+ylab("metacommunity biomass")+xlab("mutualistic strength")+
+  #geom_smooth(method = 'loess',se=F)+
+  theme_bw()+
+  theme(legend.position = "none") +
+  labs("")+
+  facet_grid(.~a)
+
+b2<-fact %>% filter(web == "plant_pollinator/M_PL_060_21.csv") %>% 
+  ggplot(aes(x=g0, y=metacomm_biomass, color=factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+xlab("")+
+  ylab("metacommunity biomass")+xlab("mutualistic strength")+
+  #geom_smooth(method = 'loess',se=F)+
+  theme_bw()+
+  theme(legend.position = "none") +
+  labs(color=" " )+
+  facet_grid(.~a)
+
+
+b3<-(fact %>% filter(web == "plant_pollinator/M_PL_061_14.csv") %>% 
+  ggplot(aes(x=g0, y=metacomm_biomass, color=factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+xlab("")+
+    ylab("metacommunity biomass")+xlab("mutualistic strength")+
+  #geom_smooth(method = 'loess',se=F)+
+  theme_bw()+
+  theme(legend.position = "none") +
+  facet_grid(.~a))
+
+
+
+
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE,fig.align='center',fig.width=7, fig.height=5, fig.cap='Relationship between species degree (number of unique species interactions) in a network and strength of mutualistic interaction at which the species collapsed shown for three different rates of species dispersal. Metacommunity size didnt have an impact on the threshold mutualistic strength at which species collapsed (see table 1). As species degree increased, the threshold mutualistic strength at which species collapsed was higher indicating that having a high species degree led to species collapsing much earlier (at a higher mutualistic strength).'}
+
+
+
+load("Species_tipping_points_spatial_data.RData")
+
+
+#converting the dataframe to numeric 
+new_df$a<-as.numeric(new_df$a)
+new_df$patches<-as.numeric(new_df$patches)
+new_df$species <- as.numeric(new_df$species)
+new_df$tipping.points<-as.numeric(new_df$tipping.points)
+new_df$degree<-as.numeric(new_df$degree)
+new_df$nestedness<-as.numeric(new_df$nestedness)
+new_df$connectance<-as.numeric(new_df$connectance)
+
+new_df<-new_df %>% filter(web !="plant_pollinator/M_PL_046.csv")
+new_df<-new_df %>% filter(web !="plant_pollinator/M_PL_013.csv")
+
+#new_df %>% 
+#ggplot(aes(y=tipping.points, x=(degree), color = factor(web)))+
+#  geom_point()+
+#  stat_smooth(method = "lm", se=F,formula = y ~ x)+
+ # theme_cowplot()+theme(legend.position = "none")+xlab("species degree")+
+  #ylab("Mutualistic strength")+
+  #facet_wrap(.~factor(a))
+
+```
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}
+
+#point of collapse estimation
+point_of_collapse_data<-expand.grid(`a`= c(0,0.05,0.15),
+                                    `no.of.species`=as.numeric(levels(as.factor(fact$network.size))),
+                                    `no_of_patches` =c(2,5,10,20),
+                                    `type.of.collapse` = "global",
+                                    `random_seed`=4327+(1:1)*100) %>% 
+  as_tibble %>% 
+  mutate(`point_of_collaspe`=0,
+         nestedness = 0,
+         connectance=0)
+
+for(i in 1:nrow(point_of_collapse_data)){
+  tempp<-collapse.point(dat = fact, mut_strength = fact$g0, 
+                        type_of_collapse = point_of_collapse_data$type.of.collapse[i], 
+                        patches = point_of_collapse_data$no_of_patches[i],
+                        species = point_of_collapse_data$no.of.species[i], 
+                        dispersal_rate = point_of_collapse_data$a[i] , 
+                        seed = point_of_collapse_data$random_seed[i])
+  
+   point_of_collapse_data$point_of_collaspe[i]<-tempp$point.of.collapse
+  point_of_collapse_data$nestedness[i]<-tempp$nestedness
+  point_of_collapse_data$connectance[i]<-tempp$connectance
+}
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}
+r1<-point_of_collapse_data %>%  
+  filter_all(all_vars(!is.infinite(.))) %>% 
+  # filter(no_of_patches !=20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = no.of.species,
+             y=log(point_of_collaspe+1), 
+             color = factor(no_of_patches)))+
+  #geom_point(outlier.size = 0)+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  xlab("Network size")+
+  ylab( expression(paste("log(mutualistic strength),"," ", gamma[0])))+
+ stat_smooth(method = "lm",se = T,
+              formula = y ~ x)+
+  scale_color_brewer(palette="Dark2")+ggtitle("A")+
+  labs(color="No. of patches")+
+  theme_bw()+
+  facet_grid(.~a)
+
+r2<-point_of_collapse_data %>%  
+  filter_all(all_vars(!is.infinite(.))) %>% 
+  # filter(no_of_patches !=20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = connectance,
+             y=log(point_of_collaspe+1), 
+             color = factor(no_of_patches)))+
+  #geom_point(outlier.size = 0)+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  xlab("Network connectance")+
+  ylab( expression(paste("log(mutualistic strength),"," ", gamma[0])))+
+  #stat_smooth(method = "glm",se = F,
+   #           method.args = list(family = "quasibinomial"))+
+  scale_color_brewer(palette="Dark2")+
+  labs(color="No. of patches")+ggtitle("B")+
+  theme_bw()+
+  facet_grid(.~a)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=7, fig.height=5, fig.cap='Relationship between the threshold mutualistic strength at which networks collapsed and structural properties of the network namely network size and connectance Note that the y-axis is normalised to have maximum value of 1. A) Network size had a significant impact on the strength at which netowks collapsed modulated mainly by the number of habitat patches. Larger metacommunities collapsed at a higher threshold mutualistic strength than smaller metacommunities. This indicates that smaller metacommunities were able to persist at lower mutualistic threshold strength whereas larger metacommunities collapsed much earlier even when mutualistic strength was high. In addition, size of the network further aggravated at which networks collapsed. Smaller networks collapsed at lower mutualistic strength than larger networks. B) Nestedness didnt have a significant impact on the mutualistic strength at which networks collapsed across a range of dispersal rates and metacommunity sizes. Mutualistic strength was normalised to have values between. Lines and ninety-five percent CI are fit from generalized linear model with quasibinomial error distribution with average threshold strength as response variable, network size/nestedness, number of habitat patches and rate of dispersal as predictor variables.'}
+
+
+plot_grid(r1,r2,nrow = 2)
+
+```
+
+# Results
+
+## Point of transition and network properties
+
+Results indicated that the mutualistic strength at which networks collapsed were determined by network size, species dispersal rate, and the size of the metacommunity. Particularly, the relationship between network size and the strength at which networks collapsed becomes negative at the highest dispersal rate modulated by the size of the metacommunity (Fig. 2A). When dispersal rate was zero, the size of metacommunity on the mutualistic strength at which network collapsed remained unaffected. However, at the highest dispersal rate, smaller networks collapsed much earlier than larger networks which became more evident at larger metacommunity sizes. Connectance or nestedness didn't have any significant impacts on the threshold at which mutualistic networks collapsed. This indicated that higher species dispersal might be detrimental as networks could collapse much earlier, particularly when metacommunity sizes were larger.
+
+## Indicators of transition and network properties
+
+In an example figure of a mutualistic network (see fig. S1), I show that as metacommunity biomass collapses, indicators such as patch variability, spatial variability, metacommunity variability increases whereas indicators at the species level did not exhibit strong increases as strength in mutualistic interaction decreased. To quantify the strength of such an increased, I measure (as detailed in the methods section) the area under the curve of each of these indicators. Such a measure of AUC would indicate which statistical metric has the strongest increase as the metacommunity collapsed.
+
+Results indicated that when species dispersal was zero, size of mutualistic network had no impact on metacommunity variability. But at higher levels of species dispersal, the relationship between AUC of metacommunity variability and network size becomes negative and was modulated by the metacommunity size (Fig 3A). This indicated that smaller networks at larger metacommunities exhibited stronger metacommunity variability before an abrupt collapse. As metacommunity size decreases, smaller networks exhibited as strong a signal before collapse as larger networks particularly when there were only two habitat patches. Thus, metacommunity variability will increase and could forecast an abrupt transition provided networks are smaller and metacommunity size is larger. Since, network connectance was negatively correlated with network size, the above result remains similar except that the relationship between AUC of metacommunity variability and connectance becomes positive (Fig. S2).
+
+In case of spatial variability, when dispersal rate was zero, smaller networks exhibited stronger spatial variability before collapse than larger networks. This result was consistent across metacommunity sizes. But as dispersal increased, which networks exhibited stronger spatial variability before collapse was dependent on the size of the metacommunity. Generally, the relationship between AUC of spatial variability and network size was negative and dependent on the size of the metacommunity. Smaller mutualistic networks embedded in larger metacommunities exhibited stronger spatial variability before collapse than smaller networks in smaller metacommunity sizes (Fig. 3B).
+
+Patch variability also known as alpha variability was impacted by size of mutualistic networks and less impacted by species dispersal and number of habitat patches i.e. metacommunity size (Fig. 3C). Particularly, larger networks had larger AUC which indicates that such networks exhibited stronger patch variability before an abrupt collapse than smaller networks. At the highest species dispersal, metacommunity size did impact had a slight impact on AUC of patch variability.
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}
+
+
+load("Species_tipping_points_spatial_data_apr15.RData")
+
+
+
+#converting the dataframe to numeric 
+new_df$a<-as.numeric(new_df$a)
+new_df$patches<-as.numeric(new_df$patches)
+new_df$species <- as.numeric(new_df$species)
+new_df$tipping.points<-as.numeric(new_df$tipping.points)
+new_df$degree<-as.numeric(new_df$degree)
+new_df$nestedness<-as.numeric(new_df$nestedness)
+new_df$connectance<-as.numeric(new_df$connectance)
+new_df$Autocorrelation<-as.numeric(new_df$Autocorrelation)
+new_df$sd<-as.numeric(new_df$sd)
+
+```
+
+The strength of mutualistic interaction at which species collapsed as the meta-network collapsed was dependent on their degree of interactions. Species which had higher number of interactions i.e., higher degree collapsed later (at a much lower strength of mutualistic strength). This was similar across rate of species dispersal and size of the metacommunity. Strength in warning signals such as standard deviation measured at the species-level was related to species degree, rate of species dispersal and less related to the size of the metacommunity. Strength of SD, measured as the AUC of species SD, increased as species degree increased indicating that species which have a larger number of unique interactions will display stronger increases in SD as the network collapses due to changes in the environment that weakens mutualistic interactions. Strength in autocorrelation, however, did not related to species degree or species dispersal. In addition, autocorrelation at first-lag, or standard deviation measured at the species level was also not impacted by topological properties or species dispersal or size of the metacommunity (Fig. 4A). However, AUC of standard deviation measured at the species level was impacted by topological properties or species dispersal or the size of the metacommunity (Fig. S5).
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE, include=FALSE}
+auc_ews_data<-expand.grid(`a`= c(0,0.05,0.15),
+                          `no.of.species`=as.numeric(levels((as.factor(fact$network.size)))),
+                          `no_of_patches` =c(2,5,10,20),
+                          `type.of.collapse` =  "global",
+                          `random_seed`=4327+(1:1)*100) %>% 
+  as_tibble %>% 
+  mutate(`auc_regional_variability`=0,
+         `auc_spatial_correlation`=0,
+         `auc_alpha_variation`=0,
+         `auc_spatial_variation`=0,
+         `auc_spatial_sd`=0,
+         `auc_sd`=0,
+         `auc_ar1`=0,
+         `spatial_ar1`=0,
+         nestedness=0,
+         connectance=0)
+
+
+for(i in 1:nrow(auc_ews_data)){
+  dtt<-aucsignal(dat = fact, 
+                 mut_strength = fact$g0,
+                 type_of_collapse =auc_ews_data$type.of.collapse[i],
+                 patches = auc_ews_data$no_of_patches[i],
+                 species = auc_ews_data$no.of.species[i],
+                 dispersal_rate = auc_ews_data$a[i],
+                 seed = auc_ews_data$random_seed[i])
+  
+  
+  auc_ews_data$auc_regional_variability[i] <-dtt$auc_regional_variability
+  auc_ews_data$auc_spatial_correlation[i] <- dtt$auc_spatial_correlation
+  auc_ews_data$auc_spatial_variation[i]<-dtt$auc_spatial_variation
+  auc_ews_data$auc_spatial_sd[i] <-dtt$auc_spatial_sd
+  auc_ews_data$auc_sd[i] <-dtt$auc_sd
+  auc_ews_data$auc_ar1[i] <- dtt$auc_ar1
+  auc_ews_data$auc_alpha_variation[i] <-dtt$auc_alpha_variation
+  auc_ews_data$spatial_ar1[i] <- dtt$auc_spatial_ar1
+  auc_ews_data$connectance[i]<-dtt$connectance
+  auc_ews_data$nestedness[i]<-dtt$nestedness
+  
+}
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=7.5, fig.cap='Relationship between network size and area under the curve of statistical metrics such as A) spatial variability, B) Alpha variability, and C) metacommunity variability for three levels of species dispersal (0,0.05,0.15) and four metacommunity sizes (2, 5, 10, 20). Note that the y-axis in all these subplots indicate the strength of increases in these indicators (measured as the AUC of the metric, see figure 1C for description) as a mutualistic metacommunity collapsed. Larger AUC would indicated stronger increases as a mutualistic meta-network collapsed.'}
+
+
+f1<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  #filter(no_of_patches != 20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = no.of.species,
+             y=log(auc_spatial_variation), 
+             color = factor(no_of_patches)))+
+  #geom_boxplot(outlier.size = 0)+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC spatial variability)")+
+  xlab("Network size")+
+  ggtitle("A")+
+  stat_smooth(method = "lm", se=T)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+f2<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  #filter(no_of_patches != 20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = no.of.species,
+             y=log(auc_alpha_variation+1), 
+             color = factor(no_of_patches) ))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC alpha variability)")+
+  xlab("Network size")+
+  ggtitle("B")+
+  stat_smooth(method = "lm", formula = y ~ x)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+
+f3<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  #filter(no_of_patches != 20) %>% 
+  ggplot(aes(x = no.of.species,
+             y=log(auc_regional_variability+1), 
+             color = factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC metacommunity variability)")+
+  xlab("Network size")+
+  ggtitle("C")+
+  stat_smooth(method = "lm", se=T)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+
+plot_grid(f1,f2,f3,nrow=3,ncol=1)
+
+
+```
+
+Alpha variability or patch variability was impacted by network size and less by species dispersal or metacommunity size. Before an abrupt transition due to decreases in mutualistic strength, larger networks will exhibit stronger patch variability before collapse than smaller networks.
+
+Species-level metrics such as species-level autocorrelation and standard deviation were averaged over all species in a network before they collapsed as mutualistic strength decreased. Species-level indicators did indicate as networks collapsed but its relationship with network topology such as connectance and network size were not significant (fig. 4A-B).
+
+```{r, echo=FALSE,warning=FALSE, message=FALSE, fig.align='center', fig.width=7, fig.height=8, fig.cap='A) Strength of mutualistic interaction at which species in a network collapsed in comparison to its degree. B) Relationship between species degree and area under the curve of SD (standard deviation) measured at the species-level and C) autocorrelation at first-lag  for three levels of dispersal (0,0.05,0.15) and four metacommunity sizes (2, 5, 10, 20). Note that the y-axis in all these subplots indicate the strength of increases in leading indicators (measured as the AUC of the metric, see figure 1C for description) as a mutualistic metacommunity collapsed. Larger AUC would indicated stronger increases as a mutualistic meta-network collapsed.'}
+
+
+
+
+ews1<-new_df %>%
+ggplot(aes(y=sd, x=degree, group=patches,color = factor(patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  #stat_smooth(method = "loess", se=F, formula = y~x)+
+  ggtitle("B")+
+  theme_bw()+
+  theme(axis.title.x = element_text(size = 10),
+  axis.text.x = element_text(size = 10),
+  axis.title.y = element_text(size = 10))+
+  theme(legend.position = "bottom")+xlab("species degree")+
+  ylab("AUC species SD")+
+  facet_wrap(.~factor(a))
+
+ews2<-new_df %>% 
+  ggplot(aes(y=Autocorrelation, x=degree, group=patches,color = factor(patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  #stat_smooth(method = "loess", se=F)+
+  theme_bw()+
+  theme(axis.title.x = element_text(size = 10),
+  axis.text.x = element_text(size = 10),
+  axis.title.y = element_text(size = 10))+
+  theme(legend.position = "bottom")+xlab("species degree")+
+  ylab("AUC species autocorrelation")+ggtitle("C")+
+  facet_wrap(.~factor(a))
+
+
+ews3<-new_df %>% 
+  ggplot(aes(y=tipping.points, x=(degree), color = factor(patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+ # stat_smooth(method = "loess", se=F,formula = y ~ x)+
+  theme_bw()+
+  theme(axis.title.x = element_text(size = 10),
+  axis.text.x = element_text(size = 10),
+  axis.title.y = element_text(size = 10))+
+  theme(legend.position = "bottom")+xlab("species degree")+
+  ylab("Mutualistic strength at collapse")+ggtitle("A")+
+  facet_wrap(.~factor(a))
+
+  
+
+grid_arrange_shared_legend(ews3,ews1,ews2,nrow=3,ncol = 1)
+
+```
+
+# Discussion
+
+Climate change can cause shifts in interaction strengths that could lead to mismatches in species interactions thereby causing negative impacts on species biomass and diversity [@thompson_dispersal_2017; @revilla_robustness_2015]. In mutualistic networks, positive interactions between groups of species leads to a positive-feedback mechanism that promotes the occurence of sudden collapses once environmental change causes interaction strengths to fall below a certain threshold [@kefi_when_2016; @baruah_impact_2022; @lever_sudden_2014]. Although, studies have tried to understand how such networks are robust to habitat destruction and changes in phenology, little is known about how the architecture of such mutualistic networks at the spatial scale could influence the timing of such collapses. Here, I show that species disperal rate, size of the metacommunity, and network architecture has significant impacts on the threshold at which a mutualistic meta-network collapses. Furthermore, performance of statistical metrics that could be used to forecast such unwanted collapses, such as metacommunitiy variability, alpha variability or spatial variability, was not only dependent on the architecture of the mutualistic meta-network but also on species dispersal rate and the size of the metacommunity.
+
+When dispersal rate was zero, all mutualistic networks distributed across a spatial scale could be coalesed to independent local communities. Effectively, metacommunity size i.e., number of habitat patches in the metacommunity, thus, has no impact when a network collapsed. This is obvious as species dipsersal is zero and spatial insurance provided by species dispersing across the landscape is effectively negligible [@loreau_biodiversity_2003]. As a result, when strength of mutualism decreased, networks collapsed and metacommunity size didnt have any impact when such networks collapsed. There was, however, a slight negative relationship between size of the network and the mutualistic threshold at which such networks collapsed. Particularly, larger networks collapsed later than smaller networks. Earlier studies have indicated that feasiblity of mutualistic networks increases as network size or nestedness increases [@baruah_impact_2022; @lever_sudden_2014]. This is intuitive as larger networks have larger number of species which effectively increases network biomass and persistence of the network as a whole.
+
+As species dispersal increases, the effect of metacommunity size becomes more evident. At high species dispersal, the relationship between network size and the mutualistic strength threshold at which networks collapsed became more negative. Smaller networks collapsed much earlier at higher dispersal rate than larger networks. This particular result was evident at larger metacommunity sizes (Fig. 2A). At smaller metacommunities, for instance a metacommunity with two habitat patches, species were able to easily disperse to the only other habitat and therefore were able to rescue local communities from collapsing at a much earlier mutualistic strength. As such, in smaller metacommunities, smaller networks collapsed at a similar mutualistic strength as larger networks. The relationship between mutualistic strength at which networks collapsed and network size becomes more negative at higher dispersal rates and larger metacommunity sizes. This can be explained as follows. In such mutualistic metacommunities species were modelled to be obligate mutualists, which indicated that species depended solely on mutualistic interactions for maintaining positive growth rate. As species dispersal increased, indicating that a larger chunk of individuals of a species dispersed from local patches, a stronger average mutualistic interaction was required for a species to maintain an overall positive growth rate locally. As a consequence, at very high dispersal rates, species growth rate decreases locally, and hence, a much stronger mutualistic strength on average would be required to maintain positive growth rate. This particular phenomena did not become an issue in smaller metacommunities, for instance a metacommunity with two habitat patches, as species could easily disperse and compensate for negative growth [@loreau_biodiversity_2003]. However, this becomes a problem at larger metacommunities as species now have more than just a few habitats to disperse to. In addition to this, smaller networks, on average, have smaller number of mutualistic interactions when compared with larger networks. As a consequence, smaller networks in larger metacommunities collapsed at a higher mutualistic strength than larger networks in larger metacommunities. Larger networks collapsed later in larger metacommunities solely because they were able to retain higher biomass due to higher number of mutualistic interactions on average, as well as due to larger number of species. Results, therefore, indicate that in order to preserve biodiversity, it is thus imperative to take into account both the sizes of communities (toplogical features) as well as the spatial scale of species interactions [@thompson_dispersal_2017].
+
+Much work has been done in identifying statistical signals that could forecast unwanted critical transitions. These statistcal signals are phenomenological in nature and could be easily identified from state-based timeseries data such as abundance or biomass [@dakos_methods_2012; @dakos_robustness_2012; @scheffer_anticipating_2012; @clements_including_2016; @baruah_when_2019]. However, such signals and their efficacy have been questioned recently both in numerical simulations studies [@hastings_regime_2010; @clements_factors_2015; @baruah_eco-evolutionary_2020] and experimental studies [@wilkinson_early_2018; @baruah_effect_2021]. Their application on multi-species communities [@baruah_community_2022; @dakos_critical_2014; @dakos_identifying_2017; @patterson_when_2021], particularly in the context of a spatial structure has been lacking. Here, I evaluated how the efficacy of commonly used statistical signals measured at the species level (autocorrelation at first-lag, standard deviation), community level (patch variability, spatial variability) and at the metacommunity level (temporal regional variability) in relation to network topology and spatial scale of interactions. Interestingly, species level metrics i.e., standard deviation and autocorrelation at first-lag exhibited increases as strength in mutualistic interaction decreased (AUC greater than 1), however, there was no relationship with network architecture (Fig. S5). Community and metacommunity-based signals such as alpha variability, spatial variability also increased as mutualistic strength decreased. Surprisingly, although smaller networks in larger metacommunities collapsed earlier, however, such networks exhibited stronger increases in spatial variability and metacommunity variability particularly at higher species dispersal rates (Fig. 3A-C). This indicated smaller networks could exhibit strong statistical signals before collapses which was conditionally dependent on high species dispersal and whether such communities were a part of a large metacommunity. Spatial variability also exhibited a similar pattern. Thus, when global changes weaken mutualistic interactions thereby leading to loss of biodiversity, indicators measured at the community and metacommunity level could potentially inform instability. Our analysis indicated that these indicators and their performance when estimated at the community or metacommunity level will be dependent on species dispersal, network architecture and how large the metacommunity is.
+
+Changes in the environment can weaken species interactions to the point of biodiversity collapse. Recovering lost ecosystem functions and processes is not easy as demographic information of species are also lost as biodiversity collapses [[@link_global_2019; @schefferAlternativeEquilibriaShallow1993; @scheffer_early-warning_2009-1]. In addition, most ecological systems can exhibit a phenomenon called hysteresis whereby even if the original stable environmental conditions are reverted, the ecological system might still not recover. There are tools that have been thus develop to forecast such unwanted transitions [@wissel_universal_1984: @dakos_robustness_2012]. When an ecological network collapses both at the local as well as at the spatial scale, signals of global meta-network instability could also be manifested in species in an ecological community. It is relatively unknown, however, which species could exhibit signals of instability, but see @dakos_identifying_2017 , @baruah_community_2022 or @patterson_when_2021. Indeed, the species that exhibited strong increases in standard deviation as networks collapsed, were the ones which had on average a larger number of interactions (Fig. 4B). The relationship between species degree and strength of species SD was non-linear, indicating that species with moderate to high number of interactions would show the strongest increase as networks collapsed. Species that had a relatively larger number of mutualistic interactions, benefited from higher positive growth rate which resulted in stronger increases in standard deviation as networks collapsed than those species that had fewer interactions. However, as shown in @dakos_critical_2014, and also here, species that have fewer interactions would collapse earlier and might not exhibit as strong an increase in standard deviation as networks collapsed. This indicates that, although, one could potentially label species that have higher number of interactions as "indicator species", that, however, would not help in informing instability of "specialist species" as they generally collapsed much earlier (Fig. 4A). Nevertheless, these results indicate that standard deviation measured at the species level could potentially increase as mutualistic interactions weaken and more so for species with a moderate to high number of interactions. Autocorrelation at first-lag also increased as interactions weakened, but its relation with species degree was unclear.
+
+Our ability to detect an impending transition is dependent on monitoring dynamics at the vicinity of the transition. However, monitoring population dynamics required intense temporal as well as spatial sampling and could potentially impact forecasting of abrupt transitions [@arkilanian_effect_2020; @clements_factors_2015; @bruel_sampling_2021] . Many other factors could also impact prediction of such transitions including but not limited to long transients and stochasticity [@hastings_regime_2010; @hastings_transient_2018]. There has been quite a debate on the appropriate set of methods or tools that could be used to predict future biodiversity states. Studies have indicated that in addition to monitoring dynamics of species abundance, phenotypic traits should be monitored as well. Including information from phenotypic dynamics such as body size could improve forecasts of biodiversity collapse [@clements_including_2016], although such an accurate forecast of biodiversity collapse is dependent on the type of environmental perturbation and the type of interactions prevalent in the community [@baruah_community_2022; @baruah_when_2019]. When changes in the environment impact communities both locally and spatially alike, ecological networks could abruptly collapse. However, when such networks collapses depends on the average rate of species dispersal, with higher species dispersal and larger metacommunities causing meta-networks to collapse at a much higher mutualistic strength. In addition, collapses of mutualistic meta-networks was also dependent largely on the topology of the network, with smaller networks collapsing at a higher mutualistic strength than larger networks. These results are pertinent for conservation efforts particularly because it points to the fact that ecological networks at larger metacommunities are as vulnerable or if not more than meta-networks at a much smaller spatial scale. When assessing whether communities are vulnerable to changes in the environment, the results from this research indicates that it is very pertinent to look at factors beyond species demographic rates, that includes the scale of spatial interactions, and topology of local ecological communities.
+
+# Author contributions
+
+GB conceptualized the study, did the analysis and wrote the manuscript.
+
+# Data availability
+
+The entire paper was written in rmarkdown format and files, data, and R scripts to reproduce the paper is located at.
+
+# References
+
+::: {#refs}
+:::
+
+\newpage
+
+\beginsupplement
+
+# Supplementary document:
+
+```{r, echo=FALSE,warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=4, fig.cap='Relationship between the threshold mutualistic strength at which networks collapsed and structural properties of the network namely nestedness (NODF).'}
+
+point_of_collapse_data %>%  
+  filter_all(all_vars(!is.infinite(.))) %>% 
+  # filter(no_of_patches !=20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = nestedness,
+             y=log(point_of_collaspe+1), 
+             color = factor(no_of_patches)))+
+  #geom_point(outlier.size = 0)+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  xlab("Nestedness")+
+  ylab( expression(paste("log(mutualistic strength),"," ", gamma[0])))+
+# stat_smooth(method = "lm",se = T,
+ #             formula = y ~ x)+
+  scale_color_brewer(palette="Dark2")+ggtitle("A")+
+  labs(color="No. of patches")+
+  theme_bw()+
+  facet_grid(.~a)
+
+
+```
+
+```{r, echo=FALSE,warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=4, fig.cap='Relationship between the threshold mutualistic strength at which networks collapsed and structural properties of the network namely nestedness (NODF).'}
+
+point_of_collapse_data %>%  
+  filter_all(all_vars(!is.infinite(.))) %>% 
+  # filter(no_of_patches !=20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = nestedness,
+             y=log(point_of_collaspe+1), 
+             color = factor(no_of_patches)))+
+  #geom_point(outlier.size = 0)+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  xlab("Nestedness")+
+  ylab( expression(paste("log(mutualistic strength),"," ", gamma[0])))+
+ #stat_smooth(method = "lm",se = T,
+  #            formula = y ~ x)+
+  scale_color_brewer(palette="Dark2")+ggtitle("A")+
+  labs(color="No. of patches")+
+  theme_bw()+
+  facet_grid(.~a)
+
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=7.5, fig.cap='Relationship between network connectance and area under the curve of statistical metrics such as A) spatial variability, B) Alpha variability, and C) metacommunity variability for three levels of species dispersal (0,0.05,0.15) and four metacommunity sizes (2, 5, 10, 20). Note that the y-axis in all these subplots indicate the strength of increases in these indicators (measured as the AUC of the metric, see figure 1C for description) as a mutualistic metacommunity collapsed. Larger AUC would indicated stronger increases as a mutualistic meta-network collapsed.'}
+
+f1<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  #filter(no_of_patches != 20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = connectance,
+             y=log(auc_spatial_variation), 
+             color = factor(no_of_patches)))+
+  #geom_boxplot(outlier.size = 0)+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC spatial variability)")+
+  xlab("Network connectance")+
+  ggtitle("A")+
+  stat_smooth(method = "lm", se=T)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+f2<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  #filter(no_of_patches != 20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = connectance,
+             y=log(auc_alpha_variation+1), 
+             color = factor(no_of_patches) ))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC alpha variability)")+
+  xlab("Network connectance")+
+  ggtitle("B")+
+  stat_smooth(method = "lm", formula = y ~ x)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+
+f3<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  #filter(no_of_patches != 20) %>% 
+  ggplot(aes(x = connectance,
+             y=log(auc_regional_variability+1), 
+             color = factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC metacommunity variability)")+
+  xlab("Network connectance")+
+  ggtitle("C")+
+  stat_smooth(method = "lm", se=T)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+
+plot_grid(f1,f2,f3,nrow=3,ncol=1)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=7.5, fig.cap='Relationship between network nestedness (NODF) and area under the curve of statistical metrics such as A) spatial variability, B) Alpha variability, and C) metacommunity variability for three levels of species dispersal (0,0.05,0.15) and four metacommunity sizes (2, 5, 10, 20). Note that the y-axis in all these subplots indicate the strength of increases in these indicators (measured as the AUC of the metric, see figure 1C for description) as a mutualistic metacommunity collapsed. Larger AUC would indicated stronger increases as a mutualistic meta-network collapsed.'}
+
+f1<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  #filter(no_of_patches != 20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = nestedness,
+             y=log(auc_spatial_variation), 
+             color = factor(no_of_patches)))+
+  #geom_boxplot(outlier.size = 0)+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC spatial variability)")+
+  xlab("Network connectance")+
+  ggtitle("A")+
+ # stat_smooth(method = "lm", se=T)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+f2<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  #filter(no_of_patches != 20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = nestedness,
+             y=log(auc_alpha_variation+1), 
+             color = factor(no_of_patches) ))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC alpha variability)")+
+  xlab("Network connectance")+
+  ggtitle("B")+
+  #stat_smooth(method = "lm", formula = y ~ x)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+
+f3<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  #filter(no_of_patches != 20) %>% 
+  ggplot(aes(x = nestedness,
+             y=log(auc_regional_variability+1), 
+             color = factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC metacommunity variability)")+
+  xlab("Network connectance")+
+  ggtitle("C")+
+  #stat_smooth(method = "lm", se=T)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+
+plot_grid(f1,f2,f3,nrow=3,ncol=1)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=6, fig.height=7.5, fig.cap='Relationship between network nestedness (NODF) and area under the curve of statistical metrics such as A) species SD, B) Autocorrelation coefficient at first-lag, for three levels of species dispersal (0,0.05,0.15) and four metacommunity sizes (2, 5, 10, 20). Note that the y-axis in all these subplots indicate the strength of increases in these indicators (measured as the AUC of the metric, see figure 1C for description) as a mutualistic metacommunity collapsed. Larger AUC would indicated stronger increases as a mutualistic meta-network collapsed.'}
+
+f1<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  #filter(no_of_patches != 20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = nestedness,
+             y=log(auc_sd), 
+             color = factor(no_of_patches)))+
+  #geom_boxplot(outlier.size = 0)+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC species SD)")+
+  xlab("Network connectance")+
+  ggtitle("A")+
+ # stat_smooth(method = "lm", se=T)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+f2<-auc_ews_data %>%  filter_all(all_vars(!is.infinite(.))) %>% 
+  #filter(no_of_patches != 20) %>% 
+  filter(type.of.collapse ==  "global") %>% 
+  ggplot(aes(x = nestedness,
+             y=log(auc_ar1+1), 
+             color = factor(no_of_patches) ))+
+  geom_point(alpha = 5/10, size = 2.25, stroke = 1.5,shape = 21)+
+  ylab("log(AUC autorcorrelation coefficient)")+
+  xlab("Network connectance")+
+  ggtitle("B")+
+  #stat_smooth(method = "lm", formula = y ~ x)+
+  scale_color_brewer(palette="Dark2")+
+  theme_bw()+
+  labs(color="No. of patches")+
+  facet_grid(.~a)
+
+
+plot_grid(f1,f2,nrow=2,ncol=1)
+
+```
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.width=7, fig.height=8.5, fig.cap=' Meta-network collapse and statistical metrics that increased as mutualistic strenght decreased for three rates of dispersal, four metacommunity size. A) Example meta-network collapse as mutualistic strength decreased. (B)  metacommunity variability as mutualistic strength decreased. (C) alpha variability as mutualistic strength decreased. (D) Spatial variability as mutualistic strength decreased, (E) species autocorrelation as mutualistic strength decreased.'}
+load("example_network_collapse.RData")
+
+r1<-fact %>% ggplot(aes(x=g0, y=metacomm_biomass, color=factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
+  ylab("Metacommunity Biomass")+
+  xlab("mutualistic strength")+
+  #stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
+  scale_color_brewer(palette="Dark2")+
+   labs(color="No. of patches")+
+  theme_bw()+
+  facet_grid(.~a)
+
+r2<-fact %>% ggplot(aes(x=g0, y=metacommunity_variability, color=factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
+  ylab("metacommunity variability")+
+  xlab("mutualistic strength")+
+  #stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
+  scale_color_brewer(palette="Dark2")+
+   labs(color="No. of patches")+
+  theme_bw()+
+  facet_grid(.~a)
+
+r3<-fact %>% ggplot(aes(x=g0, y=alpha_variability, color=factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
+  ylab("alpha variability")+
+  xlab("mutualistic strength")+
+  #stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
+  scale_color_brewer(palette="Dark2")+
+   labs(color="No. of patches")+
+  theme_bw()+
+  facet_grid(.~a)
+
+
+r4<-fact %>% ggplot(aes(x=g0, y=beta_variability, color=factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
+  ylab("spatial variability")+
+  xlab("mutualistic strength")+
+  #stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
+  scale_color_brewer(palette="Dark2")+
+   labs(color="No. of patches")+
+  theme_bw()+
+  facet_grid(.~a)
+  
+r5<-fact %>% ggplot(aes(x=g0, y=species.ar1, color=factor(no_of_patches)))+
+  geom_point(alpha = 5/10, size = 1.5, stroke = 1.5,shape = 21)+
+  ylab("autocorrelation at first-lag")+
+  xlab("mutualistic strength")+
+  #stat_smooth(method = "lm", formula = y ~ poly(x, 2))+
+  scale_color_brewer(palette="Dark2")+
+   labs(color="No. of patches")+
+  theme_bw()+
+  facet_grid(.~a)
+
+
+
+plot_grid(r1,r2,r3,r4,r5, nrow=4,ncol=2)
+
+```
