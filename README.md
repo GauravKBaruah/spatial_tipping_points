@@ -20,3 +20,7 @@ Author: G Baruah, email: gbaruahecoevo@gmail.com
 2. scale_of_ews_webs_all_data.RData - this is the data for all 56 webs used in a meta-network framework forced to collapse originated from using the `01_Code_spatial_ews.R` script and used to produce figures 2 and 3 in the main-text.
 
 3. Species_tipping_points_spatial_data_apr15.RData - this is the data for all 56 webs used in a meta-network framework but statistics are measured at the level of the species used to produce figure 4 in the main-text and originated from using the `02_code_species_spatial_ews.R` script. 
+
+# Paper
+
+1. `scale_transition.Rmd` is the rmarkdown file where the entire paper is written and annotated with codes. 
