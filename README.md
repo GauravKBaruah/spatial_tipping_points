@@ -15,7 +15,7 @@ Author: G Baruah, email: gbaruahecoevo@gmail.com
 
 # R data
 
-1. example_network_collapse.RData  -  this is an example data for a mutualistic network forced to collapse used to reproduce figure S6 in the manuscript.
+1. example_network_collapse.RData  -  this is an example data for a mutualistic network forced to collapse that could be used to produce figure S6 in the manuscript.
 
 2. scale_of_ews_webs_all_data.RData - this is the data for all 56 webs used in a meta-network framework forced to collapse originated from using the `01_Code_spatial_ews.R` script and used to produce figures 2 and 3 in the main-text.
 
