@@ -23,4 +23,4 @@ Author: G Baruah, email: gbaruahecoevo@gmail.com
 
 # Paper
 
-1. `scale_transition.Rmd` is the rmarkdown file where the entire paper is written and annotated with codes. 
+1. `scale_transition.Rmd` is the rmarkdown file. In this R markdown script, the entire paper is written, annotated with codes, comments, and citation formats.
