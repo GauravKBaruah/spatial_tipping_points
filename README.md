@@ -6,7 +6,7 @@ Author: G Baruah, email: gbaruahecoevo@gmail.com
 # R scripts
 
 1. `01_Code_spatial_ews.R` this script deals with the overall simulation of all the treatments and organizes the results into a dataframe.
-2. `02_code_species_spatial_ews.R` - this script deals with simulation of all the treatments but takes data at the species level of each meta-network and organizes into a data.frame.
+2. `02_code_species_spatial_ews.R` - this script deals with simulation of all the treatments but takes data at the species level of each meta-network and organizes into a data frame.
 
 3. `buildlandscape.R` - R script for building metacommunity landscape.
 4. `dispKernels.R` - R script for the kernel of dispersal used in the manuscript.
